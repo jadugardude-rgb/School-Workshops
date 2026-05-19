@@ -1,0 +1,1263 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Workshop Portfolio & Catalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Modern Scholastic Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* 1. LAYOUT RESET & BASE CONFIGURATION */
+        * {
+            box-sizing: border-box;
+        }
+
+        p {
+            margin: 0;
+            margin-bottom: 12px;
+        }
+
+        body {
+            background-color: #0f172a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Slide boundaries set exactly to standard 1280px x 720px presentation layout */
+        .slide-container {
+            display: none !important; /* Managed by .active class toggles */
+            align-items: center;
+            background-color: #f8fafc; /* Crisp clean scholastic off-white */
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            flex-direction: column;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 50px 70px;
+            position: relative;
+            width: 1280px;
+            margin-bottom: 60px; /* Spacing for the slide controls */
+        }
+
+        /* Active slide layout states */
+        .slide-container.active {
+            display: flex !important;
+        }
+
+        .slide-container.bleed-image-layout.active {
+            display: grid !important;
+        }
+
+        /* Abstract elegant geometric lines for premium educational aesthetic visual continuity */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 15%, rgba(13, 148, 136, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 85%, rgba(217, 119, 6, 0.05) 0%, transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 2. TYPOGRAPHY AND HIERARCHY */
+        .slide-container h1,
+        .slide-container h2,
+        .slide-container h3 {
+            color: #0f172a; /* Slate 900 */
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .slide-container p,
+        .slide-container li,
+        .slide-container .subtitle,
+        .slide-container th,
+        .slide-container td,
+        .slide-container .number-label,
+        .slide-container .bar .label {
+            color: #334155; /* Slate 700 for comfortable, professional contrast */
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .slide-container h1 {
+            font-size: 56px;
+            line-height: 1.15;
+        }
+
+        /* Top-left aligned slide header for precise reading path */
+        .slide-container .slide-title {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: left;
+            width: 100%;
+            color: #0f172a;
+            border-left: 5px solid #0d9488; /* Premium Teal focus indicator */
+            padding-left: 15px;
+        }
+
+        .slide-container h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0d9488; /* Classic Emerald-Teal */
+            margin-bottom: 10px;
+        }
+
+        .slide-container .subtitle {
+            font-size: 20px;
+            font-weight: 400;
+            margin-top: 15px;
+            color: #475569;
+        }
+
+        /* Prevents top-left content from vertically centering on content-rich slides */
+        .slide-container .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+            min-height: 0;
+        }
+
+        /* 3. LAYOUT DEFINITIONS & UTILITIES */
+        
+        /* Dark Theme overrides for Title and Closing slides */
+        .slide-container.dark-theme {
+            background-color: #0f172a; /* Slate 900 */
+        }
+
+        .slide-container.dark-theme::before {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(13, 148, 136, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(217, 119, 6, 0.08) 0%, transparent 50%);
+        }
+
+        .slide-container.dark-theme h1,
+        .slide-container.dark-theme h2,
+        .slide-container.dark-theme h3,
+        .slide-container.dark-theme p,
+        .slide-container.dark-theme .subtitle,
+        .slide-container.dark-theme .contact-info {
+            color: #f8fafc;
+        }
+
+        /* Title Slide styling */
+        .title-layout {
+            text-align: center;
+            max-width: 950px;
+        }
+
+        .title-layout h1 span {
+            color: #d97706; /* Golden Amber accent */
+        }
+
+        .title-layout hr {
+            border: none;
+            height: 3px;
+            background-color: #0d9488;
+            width: 60px;
+            margin: 20px auto;
+        }
+
+        /* Two Column Tiled Cards */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .two-column.tiled > div {
+            background-color: #f1f5f9; /* Slate 100 */
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .two-column.tiled h3 {
+            color: #b45309; /* Warm Amber */
+        }
+
+        /* Split-graphic structure for photos alongside lists */
+        .graphic-split {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .activity-graphic-wrapper {
+            border-radius: 14px;
+            overflow: hidden;
+            height: 380px;
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+            background-color: #e2e8f0;
+            position: relative;
+        }
+
+        .activity-graphic-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Tiled Content with Circles */
+        .tiled-content {
+            display: flex;
+            gap: 25px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #f1f5f9;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            padding: 25px;
+            position: relative;
+        }
+
+        .tile .icon {
+            color: #0d9488;
+            font-size: 26px;
+            margin-bottom: 15px;
+            background-color: #ffffff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .tile h3 {
+            font-size: 19px;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        .tile p {
+            font-size: 14px;
+            color: #475569;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Custom Styled List elements */
+        .bullet-list {
+            width: 100%;
+        }
+
+        .bullet-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 55px;
+            margin-bottom: 22px;
+        }
+
+        .bullet-list i {
+            color: #ffffff;
+            background-color: #0d9488;
+            font-size: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        .bullet-list li strong {
+            display: block;
+            color: #0f172a;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        /* Section Title (Dividers) */
+        .section-title-layout {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        .section-title-layout h2 {
+            font-size: 54px;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+
+        .section-title-layout p {
+            font-size: 20px;
+            margin: 0 auto;
+            max-width: 700px;
+            color: #475569;
+        }
+
+        .section-title-layout hr {
+            background-color: #0d9488;
+            border: none;
+            height: 4px;
+            margin: 20px auto;
+            width: 80px;
+        }
+
+        /* Bleed Image Layout - Strict Implementation */
+        .slide-container.bleed-image-layout {
+            align-items: start;
+            display: grid;
+            gap: 0;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            padding: 0;
+        }
+
+        .slide-container.bleed-image-layout > .content-container {
+            padding: 60px 0 60px 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .slide-container.bleed-image-layout > .image-container {
+            height: 100%;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .slide-container.bleed-image-layout img.bleed-image-side {
+            border-radius: 0 16px 16px 0;
+            display: block;
+            height: 720px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .slide-container.bleed-image-layout .bleed-text-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Clean Table grids */
+        .table-layout {
+            width: 100%;
+        }
+
+        .table-layout table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .table-layout th,
+        .table-layout td {
+            border-bottom: 1px solid #cbd5e1;
+            padding: 12px 18px;
+            text-align: left;
+        }
+
+        .table-layout th {
+            background-color: #0d9488;
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .table-layout td {
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Flat horizontal statistics comparisons */
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .bar {
+            align-items: center;
+            display: flex;
+            gap: 20px;
+        }
+
+        .bar .label {
+            color: #0f172a;
+            flex: 0 0 280px;
+            font-weight: 700;
+            text-align: right;
+            font-size: 15px;
+        }
+
+        .bar .bar-inner {
+            background-color: #e2e8f0;
+            border-radius: 8px;
+            flex-grow: 1;
+            height: 34px;
+        }
+
+        .bar .bar-fill {
+            align-items: center;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            font-size: 13px;
+            font-weight: 700;
+            height: 100%;
+            justify-content: flex-end;
+            padding-right: 15px;
+        }
+
+        .chart-summary {
+            font-style: italic;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 15px;
+            color: #475569;
+        }
+
+        /* Q&A Structure with User Contact styling */
+        .qa-layout {
+            text-align: center;
+            width: 100%;
+        }
+
+        .qa-layout h2 {
+            font-size: 54px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .qa-layout .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            font-size: 20px;
+        }
+
+        .qa-layout .contact-info span {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 14px 28px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .qa-layout .contact-info i {
+            color: #d97706;
+            font-size: 22px;
+        }
+
+        /* ==========================================
+           4. DYNAMIC INTERACTIVE GEMINI SLIDES
+           ========================================== */
+        .interactive-split {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+            width: 100%;
+            height: 480px;
+            align-items: stretch;
+        }
+
+        .interactive-form {
+            background-color: #f1f5f9;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            color: #0f172a;
+            background-color: #ffffff;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #0d9488;
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .interactive-btn {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: filter 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+        }
+
+        .interactive-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .interactive-btn:active {
+            transform: scale(0.98);
+        }
+
+        .interactive-output {
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 24px;
+            overflow-y: auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .interactive-output::-webkit-scrollbar {
+            width: 6px;
+        }
+        .interactive-output::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .interactive-output::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .interactive-output .placeholder-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #64748b;
+            gap: 15px;
+        }
+
+        .interactive-output .placeholder-state i {
+            font-size: 40px;
+            color: #cbd5e1;
+        }
+
+        .interactive-output .rendered-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .interactive-output .rendered-content h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            color: #0f172a;
+            margin-top: 0;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 6px;
+        }
+
+        .interactive-output .rendered-content p {
+            margin-bottom: 10px;
+        }
+
+        .interactive-output .rendered-content ul {
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .interactive-output .rendered-content li {
+            font-size: 13.5px;
+            margin-bottom: 6px;
+        }
+
+        /* Spinner / Loading Animations */
+        .loading-ring {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(13, 148, 136, 0.15);
+            border-radius: 50%;
+            border-top-color: #0d9488;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .app-error {
+            background-color: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        /* Presentation controls toolbar bar style */
+        .controls-bar {
+            position: fixed;
+            bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+            background-color: rgba(15, 23, 42, 0.95);
+            padding: 10px 24px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 420px;
+        }
+
+        .nav-btn {
+            background-color: #0d9488;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .nav-btn:hover {
+            background-color: #0f766e;
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        #slide-num {
+            color: #94a3b8;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title_Slide (Dark Theme) -->
+<div class="slide-container dark-theme" id="slide1">
+    <div class="title-layout">
+        <h1>Experiential Workshops for <span>Modern Schools</span></h1>
+        <hr>
+        <p class="subtitle">A Comprehensive Catalog of Dynamic, Curriculum-Aligned Sessions for Grades 6-12</p>
+    </div>
+</div>
+
+<!-- Slide 2: Meet Your Facilitator (Fully matted layout for rahul1.jpg to prevent vertical squish) -->
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title" style="border-left-color: #d97706;">Meet Your Facilitator</h2>
+    <div class="content-area">
+        <div class="graphic-split">
+            <div class="bullet-list">
+                <h3 style="color: #0f172a; font-size: 28px; margin-bottom: 4px;">Lt. Col. Rahul Sharma (Retd)</h3>
+                <p style="color: #0d9488; font-weight: 600; font-size: 18px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Leadership Coach &amp; Experiential Educator</p>
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-award"></i>
+                        <strong>15+ Years in Indian Army</strong>
+                        Specialized in operational planning, crisis administration, high-stakes teamwork, and youth training methodologies.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <strong>Experiential Rationale</strong>
+                        Passionate about pivoting traditional text-heavy instruction into practical cognitive and technical capability sandboxes.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <strong>Core Domain Focus</strong>
+                        Strategic execution, advanced cybersecurity awareness, digital citizenship guidelines, and high-confidence group communications.
+                    </li>
+                </ul>
+            </div>
+            <!-- Portrait Trainer Profile Picture adjusted to fit vertical aspect ratios perfectly without any whitespace padding -->
+            <div class="activity-graphic-wrapper" id="trainer-photo-container" style="background-color: transparent; border: none; box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12); width: 285px; height: 380px; aspect-ratio: 3/4; margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 14px;">
+                <img id="trainer-photo" src="rahul1.jpg" alt="Lt. Col. Rahul Sharma (Retd)" 
+                     style="object-fit: cover; width: 100%; height: 100%; border-radius: 14px;"
+                     onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600';">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: Section_Title (Category 1) -->
+<div class="slide-container" id="slide3">
+    <div class="section-title-layout">
+        <hr>
+        <h2>Digital Intelligence</h2>
+        <p>Equipping pupils to navigate, create, and thrive in an increasingly AI-driven and hyper-connected global ecosystem.</p>
+    </div>
+</div>
+
+<!-- Slide 4: Tiled_Text_With_Icons (Digital Intelligence Workshops) -->
+<div class="slide-container" id="slide4">
+    <h2 class="slide-title">Tech &amp; AI Literacy Modules</h2>
+    <div class="content-area">
+        <div class="tiled-content">
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-brain"></i></div>
+                <h3>Ethical AI Explorer</h3>
+                <p>Teaching prompt engineering basics, recognizing algorithm biases, and leveraging AI models responsibly for school assignments.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-user-shield"></i></div>
+                <h3>Smart Cyber Citizen</h3>
+                <p>Guiding students in managing digital footprints, understanding cyber-bullying, and maintaining healthy tech-life boundaries.</p>
+            </div>
+            <div class="tile">
+                <div class="icon"><i class="fa-solid fa-chart-simple"></i></div>
+                <h3>Visual Presentation</h3>
+                <p>Instructing students on visual hierarchy, layout rules, and creating informative infographics for classroom science projects.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Section_Title (Category 2) -->
+<div class="slide-container" id="slide5">
+    <div class="section-title-layout">
+        <hr>
+        <h2>Life Skills &amp; Communication</h2>
+        <p>Fostering personal confidence, empathy, and collaborative intelligence through low-pressure, interactive social group dynamics.</p>
+    </div>
+</div>
+
+<!-- Slide 6: Life Skills & Active child classroom photo split -->
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">Confidence &amp; Teamwork Arenas</h2>
+    <div class="content-area">
+        <div class="graphic-split">
+            <div class="two-column tiled" style="grid-template-columns: 1fr; gap: 20px;">
+                <div>
+                    <h3>Low-Pressure Speaking Lab</h3>
+                    <p>Utilizes fun improvisational micro-games to systematically dismantle public speaking anxiety. Students build verbal clarity, physical stage presence, and structural logic without fear of judgment.</p>
+                </div>
+                <div>
+                    <h3>Peer Collaboration Sandbox</h3>
+                    <p>Teaches emotional intelligence and active listening. Students coordinate in timed small-group challenges, developing critical communication pathways and healthy dispute-resolution frameworks.</p>
+                </div>
+            </div>
+            <!-- Real photo of school children participating in active classroom speaking workshop -->
+            <div class="activity-graphic-wrapper">
+                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800" 
+                     alt="School children raising hands enthusiastically during an active confidence building workshop" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/0d9488/ffffff?text=Active+Children+Speaking+Lab';">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Section_Title (Category 3) -->
+<div class="slide-container" id="slide7">
+    <div class="section-title-layout">
+        <hr>
+        <h2>Mind Mastery &amp; Study Habits</h2>
+        <p>Transforming complex textbook topics into organized, easily recallable cognitive systems that enhance focus and retention.</p>
+    </div>
+</div>
+
+<!-- Slide 8: Styled Bullet Points and Children Collaboration Photo Split -->
+<div class="slide-container" id="slide8">
+    <h2 class="slide-title">Cognitive &amp; Academic Acceleration</h2>
+    <div class="content-area">
+        <div class="graphic-split">
+            <div class="bullet-list">
+                <ul>
+                    <li>
+                        <i class="fa-solid fa-diagram-project"></i>
+                        <strong>Visual Mind-Mapping Strategies</strong>
+                        Interactive exercises teaching students how to map dense historical chapters or chemical reactions visually to aid faster revision.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-hourglass-start"></i>
+                        <strong>Beating Distraction &amp; Procrastination</strong>
+                        Practical time-blocking models, the Pomodoro setup calibrated for adolescents, and organizing a study desk environment.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-feather-pointed"></i>
+                        <strong>Narrative Memory Techniques</strong>
+                        Instruction on creative mnemonics, story association lines, and the method of loci to retain formulas and key scientific definitions.
+                    </li>
+                </ul>
+            </div>
+            <!-- High-quality real photo of younger school children doing collaborative desk-based study planning -->
+            <div class="activity-graphic-wrapper">
+                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800" 
+                     alt="School children studying collaboratively around a desk during mind mapping exercises" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x400/0d9488/ffffff?text=Mind+Mapping+Studio';">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: Section_Title (Category 4) -->
+<div class="slide-container" id="slide9">
+    <div class="section-title-layout">
+        <hr>
+        <h2>Practical Problem Solving</h2>
+        <p>Instilling a structured, proactive methodology to solve real-world problems through active prototyping and design frameworks.</p>
+    </div>
+</div>
+
+<!-- Slide 10: Bleed_Image_Right (Design Thinking Studio) -->
+<div class="slide-container bleed-image-layout" id="slide10">
+    <div class="content-container">
+        <h2 class="slide-title" style="border-left-color: #d97706;">Design Thinking Sandbox</h2>
+        <div class="content-area">
+            <div class="bleed-text-side">
+                <h3>Structured Innovation Lab</h3>
+                <p>An immersive, high-energy workshop running students through the world-standard 5-step creative design thinking framework: Empathize, Define, Ideate, Prototype, and Test.</p>
+                <p>Using craft supplies and sticky notes, student groups collaborate to rapidly prototype physical solutions solving simple campus-life challenges.</p>
+            </div>
+        </div>
+    </div>
+    <div class="image-container">
+        <!-- High-quality relevant real photo of school children active engineering / collaboration workshop -->
+        <img class="bleed-image-side" 
+             src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800" 
+             alt="School children working actively with materials and laptops on design thinking challenges" 
+             onerror="this.onerror=null; this.src='https://placehold.co/600x720/0d9488/ffffff?text=Design+Thinking+Collaboration';">
+    </div>
+</div>
+
+<!-- Slide 11: Table (Workshop Selection Matrix) -->
+<div class="slide-container" id="slide11">
+    <h2 class="slide-title">Workshop Selection Matrix</h2>
+    <div class="content-area">
+        <div class="table-layout">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Workshop Title</th>
+                        <th>Target Grade Levels</th>
+                        <th>Standard Duration</th>
+                        <th>Key Student Deliverable</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ethical AI Explorer</strong></td>
+                        <td>Grades 8 - 12</td>
+                        <td>90 Minutes</td>
+                        <td>Personal AI Prompt Guide Sheet</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Low-Pressure Speaking Lab</strong></td>
+                        <td>Grades 6 - 12</td>
+                        <td>120 Minutes</td>
+                        <td>Improvisational Speech Challenge</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Visual Mind-Mapping</strong></td>
+                        <td>Grades 7 - 10</td>
+                        <td>90 Minutes</td>
+                        <td>One-page Subject Revision Map</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Design Thinking Studio</strong></td>
+                        <td>Grades 9 - 12</td>
+                        <td>150 Minutes</td>
+                        <td>Group Physical Cardboard Prototype</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 12: Bar_Chart_For_Comparisons (Learning Retention) -->
+<div class="slide-container" id="slide12">
+    <h2 class="slide-title">Why Experiential Learning Succeeds</h2>
+    <div class="content-area">
+        <div class="chart-container">
+            <div class="bar">
+                <div class="label">Experiential Workshops (Active)</div>
+                <div class="bar-inner"><div class="bar-fill" style="width: 88%; background: linear-gradient(90deg, #0d9488, #0f766e);">88% retention rate</div></div>
+            </div>
+            <div class="bar">
+                <div class="label">Video-Based Learning (Passive)</div>
+                <div class="bar-inner"><div class="bar-fill" style="width: 45%; background: linear-gradient(90deg, #f59e0b, #d97706);">45% retention rate</div></div>
+            </div>
+            <div class="bar">
+                <div class="label">Standard Assembly Lectures (Passive)</div>
+                <div class="bar-inner"><div class="bar-fill" style="width: 20%; background: linear-gradient(90deg, #ef4444, #dc2626);">20% retention rate</div></div>
+            </div>
+        </div>
+        <p class="chart-summary">Cognitive studies show that hands-on experiential sandbox workshops achieve up to 4x higher knowledge retention than standard passive lectures.</p>
+    </div>
+</div>
+
+<!-- Slide 13: DYNAMIC GEMINI CUSTOM WORKSHOP ARCHITECT -->
+<div class="slide-container" id="slide13">
+    <h2 class="slide-title">✨ AI Workshop Architect</h2>
+    <div class="content-area">
+        <div class="interactive-split">
+            <!-- Form Input Parameters -->
+            <div class="interactive-form">
+                <div class="input-group">
+                    <label for="grade-select">Target Class Bracket</label>
+                    <select id="grade-select">
+                        <option value="Grades 6-8 (Middle School)">Grades 6-8 (Middle School)</option>
+                        <option value="Grades 9-10 (High School Junior)">Grades 9-10 (High School Junior)</option>
+                        <option value="Grades 11-12 (Senior High School)" selected>Grades 11-12 (Senior High School)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="struggle-input">Primary Student Struggle / Topic</label>
+                    <input type="text" id="struggle-input" placeholder="e.g. Exam stress, Stage fear, Chemistry symbols..." value="Dread of science formulas and memory blockages before exams">
+                </div>
+                <div class="input-group">
+                    <label for="duration-select">Preferred Class Time</label>
+                    <select id="duration-select">
+                        <option value="60 Minutes (Fast Assembly)">60 Minutes (Fast Assembly)</option>
+                        <option value="90 Minutes (Standard Block)" selected>90 Minutes (Standard Block)</option>
+                        <option value="150 Minutes (Creative Half-Day Sandbox)">150 Minutes (Creative Half-Day Sandbox)</option>
+                    </select>
+                </div>
+                <button class="interactive-btn" id="generate-workshop-btn">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> ✨ Generate Custom Workshop
+                </button>
+            </div>
+
+            <!-- Dynamic Interactive Output Display -->
+            <div class="interactive-output" id="workshop-output">
+                <div class="placeholder-state" id="architect-placeholder">
+                    <i class="fa-solid fa-compass-drafting"></i>
+                    <div>
+                        <p style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">Dynamic Workshop Customization Engine</p>
+                        <p style="font-size: 13px; margin: 0;">Specify your class profile parameters and tap generate to let our custom LLM syllabus planner sketch out an interactive program timeline.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 14: Q&A / CTA with Custom Contact Details (Dark Theme) -->
+<div class="slide-container dark-theme" id="slide14">
+    <div class="qa-layout">
+        <h2>Bring These Workshops to Your School</h2>
+        <p class="subtitle" style="color: #cbd5e1; font-size: 22px; max-width: 800px; margin: 15px auto 40px auto;">
+            Secure customized, highly interactive experimental training slots for your students' upcoming academic terms.
+        </p>
+        <div class="contact-info">
+            <span><i class="fa-solid fa-envelope"></i> rahulrk15@yahoo.com</span>
+            <span><i class="fa-solid fa-phone"></i> +91 9414034053</span>
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Presentation Toolbar -->
+<div class="controls-bar">
+    <button id="prev-btn" class="nav-btn"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+    <span id="slide-num">Slide 1 of 14</span>
+    <button id="next-btn" class="nav-btn">Next <i class="fa-solid fa-chevron-right"></i></button>
+</div>
+
+<!-- ==========================================
+     5. JAVASCRIPT SLIDE & GEMINI CORE
+     ========================================== -->
+<script>
+    // Slide Navigation Controller logic
+    const slides = document.querySelectorAll('.slide-container');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach((slide, idx) => {
+            if (idx === index) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+        document.getElementById('slide-num').textContent = `Slide ${index + 1} of ${slides.length}`;
+    }
+
+    document.getElementById('prev-btn').addEventListener('click', () => {
+        if (currentSlide > 0) {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+    });
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+    });
+
+    // Keyboard controls support
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        } else if (e.key === 'ArrowRight') {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+    });
+
+    // Initialize slide deck on ready
+    window.addEventListener('DOMContentLoaded', () => {
+        showSlide(currentSlide);
+    });
+
+    // --- GEMINI API ARCHITECT CONFIG ---
+    const apiKey = "AIzaSyCGYx5_7ud8-JbHVDfnpJy_vjdzSJtmNCs"; // Securely embedded key
+
+    async function callGemini(systemInstructionText, userQueryText) {
+        // Multi-model fallback sequence to protect local desktop runs from 404 errors
+        const models = [
+            "gemini-2.5-flash",
+            "gemini-1.5-flash",
+            "gemini-2.5-flash-preview-09-2025"
+        ];
+        
+        let lastError = null;
+
+        for (const model of models) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: userQueryText }] }],
+                systemInstruction: { parts: [{ text: systemInstructionText }] }
+            };
+
+            const maxRetries = 3;
+            let delay = 1000;
+
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                try {
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+
+                    // If model name is unrecognized publicly, skip to next model in the fallback array
+                    if (response.status === 404) {
+                        break; 
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(`API responded with status ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) {
+                        return text; // Return response on success
+                    }
+                    throw new Error("Invalid structure returned.");
+                } catch (err) {
+                    lastError = err;
+                    if (attempt === maxRetries - 1) {
+                        break; // Exhausted retries for this model name, proceed to fallback
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2; 
+                }
+            }
+        }
+        throw new Error(lastError ? lastError.message : "All Gemini model routing configurations failed.");
+    }
+
+    function parseSimpleMarkdown(markdown) {
+        let lines = markdown.split('\n');
+        let html = '<div class="rendered-content">';
+        let inList = false;
+
+        for (let line of lines) {
+            line = line.trim();
+            if (!line) continue;
+
+            if (line.startsWith('### ')) {
+                if (inList) { html += '</ul>'; inList = false; }
+                html += `<h4>${line.substring(4)}</h4>`;
+            } else if (line.startsWith('## ')) {
+                if (inList) { html += '</ul>'; inList = false; }
+                html += `<h4>${line.substring(3)}</h4>`;
+            } else if (line.startsWith('# ')) {
+                if (inList) { html += '</ul>'; inList = false; }
+                html += `<h4>${line.substring(2)}</h4>`;
+            } else {
+                let parsedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                if (line.startsWith('- ') || line.startsWith('* ')) {
+                    if (!inList) { html += '<ul>'; inList = true; }
+                    html += `<li>${parsedLine.substring(2)}</li>`;
+                } else {
+                    if (inList) { html += '</ul>'; inList = false; }
+                    html += `<p>${parsedLine}</p>`;
+                }
+            }
+        }
+
+        if (inList) { html += '</ul>'; }
+        html += '</div>';
+        return html;
+    }
+
+    // Initialize Event Listeners for Live Architect
+    window.addEventListener('DOMContentLoaded', () => {
+        const generateBtn = document.getElementById('generate-workshop-btn');
+        const workshopOutput = document.getElementById('workshop-output');
+
+        generateBtn.addEventListener('click', async () => {
+            const grade = document.getElementById('grade-select').value;
+            const struggle = document.getElementById('struggle-input').value.trim();
+            const duration = document.getElementById('duration-select').value;
+
+            if (!struggle) {
+                workshopOutput.innerHTML = `
+                    <div class="app-error">
+                        <strong>Missing Parameters:</strong> Please provide a specific target student struggle or topic of interest before generating!
+                    </div>
+                `;
+                return;
+            }
+
+            workshopOutput.innerHTML = `
+                <div class="placeholder-state">
+                    <div class="loading-ring"></div>
+                    <div>
+                        <p style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">Architecting Customized Syllabus...</p>
+                        <p style="font-size: 13px; margin: 0;">Consulting pedagogical matrices to structure a perfect experiential roadmap for ${grade} students.</p>
+                    </div>
+                </div>
+            `;
+
+            const systemInstruction = `You are an elite educational consultant and school syllabus designer. 
+Your goal is to construct a highly compelling, practical, experiential workshop program based on a target grade level, specific student struggle, and duration.
+Format your output with:
+1. A creative, catchy "Workshop Title"
+2. A structured hour-by-hour timeline (e.g. Breakdowns for 10 min icebreakers, 30 min sandboxes, etc.)
+3. A list of 3 specific "Hands-on Exercises" with paper/cardboard/basic student supplies
+4. 2 clear, tangible "Student Deliverables"
+Keep the tone energetic, prestige academic, and extremely professional. Use clear markdown formatting, starting section categories with '### '.`;
+
+            const userPrompt = `Generate a customized experiential workshop proposal for:
+- Grade Cohort: ${grade}
+- Duration Limit: ${duration}
+- Core Student Struggle/Topic: "${struggle}"
+Include practical deliverables that can be shared with parents and school boards.`;
+
+            try {
+                const aiResult = await callGemini(systemInstruction, userPrompt);
+                workshopOutput.innerHTML = parseSimpleMarkdown(aiResult);
+            } catch (error) {
+                workshopOutput.innerHTML = `
+                    <div class="app-error">
+                        <strong>Architect Engine Error:</strong> Failed to fetch generated syllabus. Make sure your API key has text-generation quotas.
+                        <p style="font-size: 11px; margin-top: 5px; color: #7f1d1d;">${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
